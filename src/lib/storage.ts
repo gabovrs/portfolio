@@ -8,10 +8,13 @@ const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 const MAX_IMAGE = 6 * 1024 * 1024;
 const MAX_PDF = 8 * 1024 * 1024;
 
+// Vercel conecta el store con BLOB_STORE_ID (+ token OIDC del despliegue) o con BLOB_READ_WRITE_TOKEN.
+const hasBlob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID);
+
 export type UploadKind = "image" | "pdf";
 
 /**
- * Sube un archivo a Vercel Blob. Sin BLOB_READ_WRITE_TOKEN (desarrollo local)
+ * Sube un archivo a Vercel Blob. Sin credenciales de Blob (desarrollo local)
  * lo guarda en public/uploads.
  */
 export async function uploadFile(file: File, folder: string, kind: UploadKind = "image") {
@@ -27,7 +30,7 @@ export async function uploadFile(file: File, folder: string, kind: UploadKind = 
   const ext = (file.name.split(".").pop() || (kind === "pdf" ? "pdf" : "jpg")).toLowerCase().replace(/[^a-z0-9]/g, "");
   const name = `${folder}/${randomUUID()}.${ext}`;
 
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  if (hasBlob()) {
     const blob = await put(name, file, { access: "public", contentType: file.type });
     return blob.url;
   }
@@ -44,7 +47,7 @@ export async function uploadFile(file: File, folder: string, kind: UploadKind = 
 
 /** Borra un archivo anterior si estaba en Vercel Blob. Los archivos locales y de /seed se dejan. */
 export async function removeFile(url: string | null | undefined) {
-  if (!url || !process.env.BLOB_READ_WRITE_TOKEN) return;
+  if (!url || !hasBlob()) return;
   if (!url.includes(".blob.vercel-storage.com")) return;
   try {
     await del(url);
