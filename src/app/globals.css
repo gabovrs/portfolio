@@ -4,10 +4,10 @@
   --line: rgba(11, 13, 18, 0.1); --line-2: rgba(11, 13, 18, 0.18);
   --accent: #2b3ff2; --accent-ink: #ffffff; --accent-soft: rgba(43, 63, 242, 0.08); --live: #13824a; --danger: #c9302c;
   --band: #0b0d12; --band-ink: #eceef2; --band-muted: #9097a6; --band-line: rgba(236, 238, 242, 0.12);
-  --f-display: var(--font-inter-tight), "Inter", system-ui, sans-serif;
-  --f-body: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
-  --f-serif: var(--font-serif), Georgia, "Times New Roman", serif;
-  --f-mono: var(--font-mono), ui-monospace, Menlo, Consolas, monospace;
+  --f-display: "Inter Tight Variable", "Inter Variable", system-ui, sans-serif;
+  --f-body: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --f-mono: "JetBrains Mono Variable", ui-monospace, Menlo, Consolas, monospace;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {

@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Inter, Inter_Tight, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+// Fuentes empaquetadas con el proyecto: el build no depende de Google Fonts.
+import "@fontsource-variable/inter";
+import "@fontsource-variable/inter-tight";
+import "@fontsource/instrument-serif/latin-400.css";
+import "@fontsource/instrument-serif/latin-400-italic.css";
+import "@fontsource-variable/jetbrains-mono";
 import { themeScript } from "@/components/ThemeToggle";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const interTight = Inter_Tight({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-inter-tight", display: "swap" });
-const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
-const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL ?? "http://localhost:3000"),
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" suppressHydrationWarning className={`${inter.variable} ${interTight.variable} ${serif.variable} ${mono.variable}`}>
+    <html lang="es" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
