@@ -32,6 +32,10 @@ export async function uploadFile(file: File, folder: string, kind: UploadKind = 
     return blob.url;
   }
 
+  if (process.env.VERCEL) {
+    throw new Error("Falta conectar un Blob store en Vercel (Storage → Blob) para subir archivos.");
+  }
+
   const dir = path.join(process.cwd(), "public", "uploads", folder);
   await mkdir(dir, { recursive: true });
   await writeFile(path.join(process.cwd(), "public", "uploads", name), Buffer.from(await file.arrayBuffer()));
