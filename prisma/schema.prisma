@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+/// Datos generales del sitio. Siempre existe una sola fila (id = 1).
+model Profile {
+  id           Int      @id @default(1)
+  firstName    String
+  lastName     String
+  accentName   String   @default("")
+  headline     String
+  intro        String
+  availability String
+  available    Boolean  @default(true)
+  photoUrl     String?
+  photoCaption String   @default("")
+  aboutQuote   String
+  aboutText    String
+  contactTitle String
+  email        String
+  linkedinUrl  String?
+  githubUrl    String?
+  cvUrl        String?
+  techStrip    String[]
+  updatedAt    DateTime @updatedAt
+}
+
+model Stat {
+  id    String @id @default(cuid())
+  value String
+  label String
+  order Int    @default(0)
+}
+
+enum ProjectStatus {
+  IN_PROGRESS
+  LIVE
+  ARCHIVED
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  title       String
+  role        String
+  period      String        @default("")
+  status      ProjectStatus @default(LIVE)
+  statusLabel String        @default("")
+  summary     String
+  highlights  String[]
+  tech        String[]
+  /// Lista de { value, label } para las cifras del proyecto
+  metrics     Json          @default("[]")
+  url         String?
+  linkLabel   String?
+  imageUrl    String?
+  imageAlt    String        @default("")
+  featured    Boolean       @default(false)
+  visible     Boolean       @default(true)
+  order       Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Experience {
+  id          String  @id @default(cuid())
+  period      String
+  title       String
+  org         String
+  description String  @default("")
+  current     Boolean @default(false)
+  order       Int     @default(0)
+}
+
+model SkillGroup {
+  id    String   @id @default(cuid())
+  label String
+  items String[]
+  order Int      @default(0)
+}
