@@ -9,7 +9,7 @@ Sitio personal con panel de administración. Next.js 15 (App Router), Prisma + P
 
 ```bash
 pnpm install
-cp .env.example .env        # completa DATABASE_URL, DIRECT_URL, ADMIN_PASSWORD y AUTH_SECRET
+cp .env.example .env        # completa DATABASE_URL, DATABASE_URL_UNPOOLED, ADMIN_PASSWORD y AUTH_SECRET
 pnpm db:migrate             # crea las tablas
 pnpm db:seed                # carga tus datos iniciales
 pnpm dev                    # http://localhost:3000 y http://localhost:3000/admin
@@ -20,10 +20,11 @@ Sin `BLOB_READ_WRITE_TOKEN`, las imágenes que subas en local se guardan en `pub
 ## Despliegue en Vercel
 
 1. Importa el repositorio en Vercel.
-2. En **Storage**, crea una base **Neon (Postgres)** y un **Blob store** y conéctalos al proyecto. Esto agrega `DATABASE_URL`, `DIRECT_URL` (o `DATABASE_URL_UNPOOLED`, cópiala como `DIRECT_URL`) y `BLOB_READ_WRITE_TOKEN`.
-3. Agrega `ADMIN_PASSWORD`, `AUTH_SECRET` (`openssl rand -base64 32`) y `SITE_URL` (tu dominio, por ejemplo `https://gabrielvaras.cl`).
-4. Cambia el **Build Command** a `pnpm db:deploy && pnpm build` para que las migraciones se apliquen en cada despliegue.
-5. Después del primer despliegue, carga los datos iniciales una vez desde tu computador apuntando a la base de producción: `DATABASE_URL=... DIRECT_URL=... pnpm db:seed`.
+2. En **Storage**, conecta una base **Neon (Postgres)** y un **Blob store** al proyecto. Vercel agrega solo `DATABASE_URL`, `DATABASE_URL_UNPOOLED` y `BLOB_READ_WRITE_TOKEN`.
+3. Agrega `ADMIN_PASSWORD`, `AUTH_SECRET` (`openssl rand -base64 32`) y `SITE_URL` (tu dominio).
+4. Despliega. El build (`pnpm build`) aplica las migraciones y, si la base está vacía, carga los datos iniciales. Si la base ya tiene datos, no los toca.
+
+Si usas el dominio `*.vercel.app` como sitio público, desactiva **Settings → Deployment Protection → Vercel Authentication** para producción, o los visitantes verán un inicio de sesión de Vercel.
 
 ## Formato de textos en el panel
 

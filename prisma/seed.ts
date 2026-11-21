@@ -3,6 +3,12 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+  // Solo carga los datos iniciales en una base vacía, así no pisa lo que edites en el panel.
+  if ((await prisma.profile.count()) > 0) {
+    console.log("La base ya tiene datos: se omite la carga inicial.");
+    return;
+  }
+
   await prisma.profile.upsert({
     where: { id: 1 },
     update: {},
